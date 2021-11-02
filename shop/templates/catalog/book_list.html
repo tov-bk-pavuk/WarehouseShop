@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %} Перечень всех книг {% endblock %}
+
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4">Наименование</div>
+        <div class="col-lg-2">Рейтинг</div>
+        <div class="col-lg-2">Цена</div>
+        <div class="col-lg-2">дата издания</div>
+        <div class="col-lg-2">в наличии</div>
+    </div>
+    {% for inctance in object_list %}
+    <div class="row">
+        <div class="col-lg-4">{{ inctance.name }}</div>
+        <div class="col-lg-2">{{ inctance.rating }}</div>
+        <div class="col-lg-2">{{ inctance.price }}</div>
+        <div class="col-lg-2">{{ inctance.pubdate }}</div>
+        <div class="col-lg-2">{{ inctance.quantity }}</div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

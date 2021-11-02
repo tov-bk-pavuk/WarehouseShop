@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+     <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+    <!-- Mine CSS -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" type="text/css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+
+    <!--Навигационная панель-->
+    <ul class="nav justify-content-center bg-warning ">
+      <li class="nav-item col-lg-2">
+        <a class="nav-link active text-white" aria-current="page" href="{% url 'book_list' %}">Книги</a>
+      </li>
+      <li class="nav-item col-lg-2">
+        <a class="nav-link text-white" href="#">По авторам</a>
+      </li>
+        <li class="nav-item col-lg-2">
+        <a class="nav-link text-white" href="#">Хиты-продаж</a>
+      </li>
+        <li class="nav-item col-lg-1">
+        <a class="nav-link text-white" href="#">Корзина</a>
+      </li>
+      <li class="nav-item col-lg-2">
+        <a class="nav-link text-white" href="#">Доставка</a>
+      </li>
+      {% if user.is_authenticated %}
+      <li class="nav-item col-lg-1">
+        <a class="nav-link text-white disabled">Hello {{ user }}</a>
+      </li>
+      <li class="nav-item col-lg-1">
+        <a class="nav-link text-white" href="{% url 'usr_logout' %}">Logout</a>
+      </li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'usr_login' %}">Login</a>
+      </li>
+      {% endif %}
+    </ul>
+    <!--Конец навигационной панели-->
+
+<!--Основной контейнер-->
+<div class="container-fluid">
+    <div class="row-lg-8">
+        <div class="col">
+            {% if messages %}
+                {% for message in messages %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              {{ message }}
+<!--              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+            </div>
+                {% endfor %}
+            {% endif %}
+        {% block content %}
+<!--            БЛОК КОНТЕНТА-->
+        {% endblock %}
+        </div>
+    </div>
+</div>
+<!--конец основного контейнера-->
+</body>
+</html>
