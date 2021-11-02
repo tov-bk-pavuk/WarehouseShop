@@ -1,24 +1,23 @@
-# from django.views.generic import (
-#     CreateView,
-#     DeleteView,
-#     DetailView,
-#     ListView,
-#     UpdateView,
-# )
-
-# from .forms import UserForm
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
 
 
-# class CreateProfile(CreateView):
-#     template_name = 'registration/create_profile.html'
-#     form_class = UserForm
-#
-#
-# class UpdateProfile(UpdateView):
-#     template_name = 'update_profile.html'
-#     pass
-#
-#
-# class DelProfile(DeleteView):
-#     template_name = 'del_profile.html'
-#     pass
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.success(request, ('Wrong password or username'))
+            return redirect('usr_login')
+    return render(request, 'usr_auth/login.html')
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('usr_login')
