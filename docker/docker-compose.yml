@@ -1,0 +1,17 @@
+version: '3.9'
+services:
+  warehouse:
+    build: ./warehouse
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./core_warehouse/:/usr/src/core_warehouse/
+    ports:
+      - 8000:8000
+      
+  shop:
+    build: ./shop
+    command: python manage.py runserver 0.0.0.0:8001
+    volumes:
+      - ./core_shop/:/usr/src/core_shop/
+    ports:
+      - 8001:8001
