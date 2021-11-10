@@ -1,17 +1,55 @@
 version: '3.9'
 services:
+
+  db_w:
+    image: postgres:latest
+    container_name: db_warehouse
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - warehouse
+    ports:
+      - '7001:5432'
+
   warehouse:
-    build: ./warehouse
+    build: ./../warehouse
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./core_warehouse/:/usr/src/core_warehouse/
+      - ./../warehouse/core_warehouse/:/usr/src/core_warehouse/
+    networks:
+      - warehouse
     ports:
-      - 8000:8000
-      
+      - '8000:8000'
+    depends_on:
+      - db_w
+
+  db_s:
+    image: postgres:latest
+    container_name: db_shop
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - shop
+    ports:
+      - '7000:5432'
+
+
   shop:
-    build: ./shop
+    build: ./../shop
     command: python manage.py runserver 0.0.0.0:8001
     volumes:
-      - ./core_shop/:/usr/src/core_shop/
+      - ./../shop/core_shop/:/usr/src/core_shop/
+    networks:
+    - shop
     ports:
-      - 8001:8001
+      - '8001:8001'
+    depends_on:
+      - db_s
+
+networks:
+  warehouse:
+  shop:
