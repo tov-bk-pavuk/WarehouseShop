@@ -8,6 +8,8 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    volumes:
+      - db_w:/usr/lib/postgresql/data
     networks:
       - warehouse
     ports:
@@ -32,6 +34,8 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    volumes:
+      - db_s:/usr/lib/postgresql/data
     networks:
       - shop
     ports:
@@ -53,3 +57,7 @@ services:
 networks:
   warehouse:
   shop:
+
+volumes:
+  db_s:
+  db_w:
