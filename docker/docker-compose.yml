@@ -8,6 +8,8 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    volumes:
+      - db_w:/usr/lib/postgresql/data
     networks:
       - warehouse
     ports:
@@ -17,7 +19,7 @@ services:
     build: ./../warehouse
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./../warehouse/core_warehouse/:/usr/src/core_warehouse/
+      - ./../warehouse/:/usr/src/warehouse/
     networks:
       - warehouse
     ports:
@@ -32,6 +34,8 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    volumes:
+      - db_s:/usr/lib/postgresql/data
     networks:
       - shop
     ports:
@@ -42,7 +46,7 @@ services:
     build: ./../shop
     command: python manage.py runserver 0.0.0.0:8001
     volumes:
-      - ./../shop/core_shop/:/usr/src/core_shop/
+      - ./../shop:/usr/src/shop
     networks:
     - shop
     ports:
@@ -53,3 +57,7 @@ services:
 networks:
   warehouse:
   shop:
+
+volumes:
+  db_s:
+  db_w:
