@@ -19,7 +19,7 @@ services:
     build: ./../warehouse
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./../warehouse/core_warehouse/:/usr/src/core_warehouse/
+      - ./../warehouse/:/usr/src/warehouse/
     networks:
       - warehouse
     ports:
@@ -46,7 +46,7 @@ services:
     build: ./../shop
     command: python manage.py runserver 0.0.0.0:8001
     volumes:
-      - ./../shop/core_shop/:/usr/src/core_shop/
+      - ./../shop:/usr/src/shop
     networks:
     - shop
     ports:

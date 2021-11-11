@@ -21,3 +21,7 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('usr_login')
+
+
+def base(request):
+    return render(request, 'base.html')

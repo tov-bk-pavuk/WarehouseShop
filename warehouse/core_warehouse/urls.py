@@ -28,6 +28,7 @@ router.register(r'users', UserViewSet)
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', views.user_login, name='home'),
+    path('base/', views.base, name='base'),
     path('api/', include(router.urls)),
     path('admin/', admin.site.urls),
     path('users/', include('django.contrib.auth.urls')),
