@@ -41,6 +41,26 @@ services:
     ports:
       - '7000:5432'
 
+  red:
+    image: redis:6.2.6
+    container_name: red_for_shop
+    networks:
+      - shop
+
+  rabb:
+    image: rabbitmq:latest
+    container_name: rabbit
+    networks:
+      - shop
+
+  celr:
+    image: celery:4.0.2
+    container_name: celery
+    networks:
+      - shop
+      - warehouse
+    depends_on:
+      - rabb
 
   shop:
     build: ./../shop
