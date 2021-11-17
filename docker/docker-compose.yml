@@ -17,6 +17,7 @@ services:
 
   warehouse:
     build: ./../warehouse
+    container_name: warehouse_container
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./../warehouse/:/usr/src/warehouse/
@@ -41,34 +42,45 @@ services:
     ports:
       - '7000:5432'
 
-  red:
+  redis:
     image: redis:6.2.6
-    container_name: red_for_shop
+    container_name: red
+    command: redis-server
     networks:
       - shop
+    ports:
+      - '6400:6379'
 
   rabb:
     image: rabbitmq:latest
-    container_name: rabbit
+    container_name: rabbit_cont
     networks:
       - shop
+    ports:
+       - '5600:5600'
 
-  celr:
-    image: celery:4.0.2
-    container_name: celery
+  celery_shop:
+    build: ./../shop
+    container_name: celery_cont
+    command: celery -A core_shop worker -l INFO
     networks:
       - shop
       - warehouse
     depends_on:
       - rabb
+      - redis
+      - shop
+    ports:
+      - '5500:5500'
 
   shop:
     build: ./../shop
+    container_name: shop_cont
     command: python manage.py runserver 0.0.0.0:8001
     volumes:
       - ./../shop:/usr/src/shop
     networks:
-    - shop
+      - shop
     ports:
       - '8001:8001'
     depends_on:
