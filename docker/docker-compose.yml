@@ -51,18 +51,22 @@ services:
     ports:
       - '6400:6379'
 
-  rabb:
+  rabbit:
     image: rabbitmq:latest
     container_name: rabbit_cont
+    environment:
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
     networks:
       - shop
     ports:
-       - '5600:5600'
+       - '15673:15672'
 
-  celery_shop:
+  celery:
     build: ./../shop
-    container_name: celery_cont
-    command: celery -A core_shop worker -l INFO
+    container_name: celery
+    command: 'celery -A core_shop worker -l INFO'
     networks:
       - shop
       - warehouse

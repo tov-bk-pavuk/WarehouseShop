@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'usr_auth',
     'cart',
     'catalog',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -138,7 +139,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_RESULT_BACKEND = 'redis://redis:6400'  # тут должен быть редис  # redis://redis:6379/2
-CELERY_BROKER_URL = 'rabb:5600'  # тут должен быть ребитMQ 'amqp://localhost'
+CELERY_BROKER_URL = 'amqp://rabbitmq:rabbitmq@rabbit:5672'  # amqp://rabbitmq:rabbitmq@rabbit:5672
 CELERY_ACCEPT_CONTENT = ['json']  # ['aplication/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
