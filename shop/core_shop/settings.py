@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'usr_auth',
     'cart',
     'catalog',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -77,10 +78,13 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'db_s',
+        'HOST': 'db_s',  # 'HOST': '0.0.0.0', для зпуска с базой в докере  # 'HOST': 'db_s',
+        # sudo docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres:latest
         'PORT': 5432,
     }
 }
+
+
 
 
 # Password validation
@@ -129,3 +133,14 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# celery
+
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_RESULT_BACKEND = 'redis://redis:6400'  # тут должен быть редис  # redis://redis:6379/2
+CELERY_BROKER_URL = 'amqp://rabbitmq:rabbitmq@rabbit:5672'  # amqp://rabbitmq:rabbitmq@rabbit:5672
+CELERY_ACCEPT_CONTENT = ['json']  # ['aplication/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE

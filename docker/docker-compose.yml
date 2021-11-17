@@ -17,6 +17,7 @@ services:
 
   warehouse:
     build: ./../warehouse
+    container_name: warehouse_container
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./../warehouse/:/usr/src/warehouse/
@@ -41,14 +42,49 @@ services:
     ports:
       - '7000:5432'
 
+  redis:
+    image: redis:6.2.6
+    container_name: red
+    command: redis-server
+    networks:
+      - shop
+    ports:
+      - '6400:6379'
+
+  rabbit:
+    image: rabbitmq:latest
+    container_name: rabbit_cont
+    environment:
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    networks:
+      - shop
+    ports:
+       - '15673:15672'
+
+  celery:
+    build: ./../shop
+    container_name: celery
+    command: 'celery -A core_shop worker -l INFO'
+    networks:
+      - shop
+      - warehouse
+    depends_on:
+      - rabb
+      - redis
+      - shop
+    ports:
+      - '5500:5500'
 
   shop:
     build: ./../shop
+    container_name: shop_cont
     command: python manage.py runserver 0.0.0.0:8001
     volumes:
       - ./../shop:/usr/src/shop
     networks:
-    - shop
+      - shop
     ports:
       - '8001:8001'
     depends_on:
